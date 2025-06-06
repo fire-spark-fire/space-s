@@ -1,0 +1,132 @@
+name: Deploy to Aliyun Server
+
+on:
+  # 支持手动触发
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: '部署环境'
+        required: true
+        default: 'production'
+        type: choice
+        options:
+        - production
+        - staging
+  
+  # 当推送到 main 分支时自动触发
+  push:
+    branches: [ main ]
+  
+  # 当 PR 合并到 main 分支时触发
+  pull_request:
+    branches: [ main ]
+    types: [ closed ]
+
+jobs:
+  deploy:
+    name: 部署到阿里云服务器
+    runs-on: ubuntu-latest
+    
+    # 只在 PR 合并时或手动触发时执行
+    if: github.event_name == 'workflow_dispatch' || github.event_name == 'push' || (github.event_name == 'pull_request' && github.event.pull_request.merged == true)
+    
+    steps:
+    - name: 检出代码
+      uses: actions/checkout@v4
+      
+    - name: 设置 Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+        
+    - name: 安装依赖
+      run: npm ci
+      
+    - name: 构建项目
+      run: npm run build
+      
+    - name: 创建部署包
+      run: |
+        mkdir -p deploy
+        cp -r .next deploy/
+        cp -r public deploy/
+        cp package.json deploy/
+        cp package-lock.json deploy/
+        cp next.config.ts deploy/
+        tar -czf deploy.tar.gz -C deploy .
+        
+    - name: 部署到阿里云服务器
+      uses: appleboy/ssh-action@v1.0.3
+      with:
+        host: ${{ secrets.ALIYUN_HOST }}
+        username: ${{ secrets.ALIYUN_USERNAME }}
+        key: ${{ secrets.ALIYUN_SSH_KEY }}
+        port: ${{ secrets.ALIYUN_PORT || 22 }}
+        script: |
+          # 设置部署目录
+          DEPLOY_DIR="/var/www/space-s"
+          BACKUP_DIR="/var/www/backups/space-s-$(date +%Y%m%d_%H%M%S)"
+          
+          # 创建备份
+          if [ -d "$DEPLOY_DIR" ]; then
+            echo "创建备份到 $BACKUP_DIR"
+            sudo mkdir -p $(dirname $BACKUP_DIR)
+            sudo cp -r $DEPLOY_DIR $BACKUP_DIR
+          fi
+          
+          # 创建部署目录
+          sudo mkdir -p $DEPLOY_DIR
+          cd $DEPLOY_DIR
+          
+          # 停止现有服务 (如果使用 PM2)
+          sudo pm2 stop space-s || true
+          
+          # 清理旧文件
+          sudo rm -rf .next public package.json package-lock.json next.config.ts node_modules
+          
+    - name: 上传部署包
+      uses: appleboy/scp-action@v0.1.7
+      with:
+        host: ${{ secrets.ALIYUN_HOST }}
+        username: ${{ secrets.ALIYUN_USERNAME }}
+        key: ${{ secrets.ALIYUN_SSH_KEY }}
+        port: ${{ secrets.ALIYUN_PORT || 22 }}
+        source: "deploy.tar.gz"
+        target: "/tmp/"
+        
+    - name: 解压并启动服务
+      uses: appleboy/ssh-action@v1.0.3
+      with:
+        host: ${{ secrets.ALIYUN_HOST }}
+        username: ${{ secrets.ALIYUN_USERNAME }}
+        key: ${{ secrets.ALIYUN_SSH_KEY }}
+        port: ${{ secrets.ALIYUN_PORT || 22 }}
+        script: |
+          DEPLOY_DIR="/var/www/space-s"
+          
+          # 解压部署包
+          cd $DEPLOY_DIR
+          sudo tar -xzf /tmp/deploy.tar.gz
+          sudo chown -R $(whoami):$(whoami) .
+          
+          # 安装生产依赖
+          npm ci --only=production
+          
+          # 启动服务 (使用 PM2)
+          pm2 start npm --name "space-s" -- start || pm2 restart space-s
+          
+          # 清理临时文件
+          rm -f /tmp/deploy.tar.gz
+          
+          echo "✅ 部署完成！"
+          echo "🚀 应用已启动在端口 3000"
+          
+    - name: 部署状态通知
+      if: always()
+      run: |
+        if [ "${{ job.status }}" == "success" ]; then
+          echo "✅ 部署成功！"
+        else
+          echo "❌ 部署失败！"
+        fi 
