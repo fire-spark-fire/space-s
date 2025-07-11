@@ -4,37 +4,37 @@ export default function Introduction() {
 
     const introductionParts = [
         {
-            title: "Start",
+            title: "方向",
             description:
-                "Begin your journey with Spark and discover your potential to create meaningful impact in the world.",
+                'Spark 是一个面向青年群体、以“相互成长，彼此支持”为文化核心的去中心化人际连接平台。',
             icon: <Star className="w-5 h-5" />,
             color: "from-red-500 to-red-600",
         },
         {
-            title: "Programs",
+            title: "愿景",
             description:
-                "Comprehensive training programs designed to fuel your growth and expertise in cutting-edge technologies.",
+                "Spark 旨在为青年个体提供一个低功利性但具备真实连接可能性的生态系统。",
             icon: <FileText className="w-5 h-5" />,
             color: "from-orange-500 to-red-500",
         },
         {
-            title: "Online Events",
+            title: "目标",
             description:
-                "Virtual gatherings that connect minds and spark collaborative innovation across global communities.",
+                "构建成员精神性档案体系，将个体经验沉淀为可追溯的共识性内容；建立结构化的“被看见”机制，使成员在非表演性表达中获得回应与认可。",
             icon: <Globe className="w-5 h-5" />,
             color: "from-red-600 to-orange-600",
         },
         {
-            title: "In-Site Events",
+            title: "价值",
             description:
-                "Physical meetups and workshops that bring the community together for hands-on learning experiences.",
+                "自我表达的轻松性；关系的相互回应性；内容的存续性；连接的稳定性",
             icon: <MapPin className="w-5 h-5" />,
             color: "from-orange-600 to-red-700",
         },
         {
-            title: "Influence",
+            title: "机制",
             description:
-                "Building emotional connections and meaningful relationships within our passionate community of innovators.",
+                "三层平台架构；多重角色设定；机制工具设计。确保轻连接、深共鸣、高体验。",
             icon: <Heart className="w-5 h-5" />,
             color: "from-red-700 to-orange-500",
         },
@@ -44,10 +44,10 @@ export default function Introduction() {
             <div className="container mx-auto max-w-6xl">
                 <div className="text-center mb-20">
                     <h2 className="text-4xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-red-400 to-orange-400 bg-clip-text text-transparent tracking-tight">
-                        INTRODUCTION
+                        向你介绍一下Spark
                     </h2>
                     <p className="text-xl text-gray-300 max-w-3xl mx-auto leading-relaxed">
-                        Discover the five pillars that make Spark a transformative force in innovation and community building.
+                        关于我们是谁，我们在做什么，以及我们的核心价值
                     </p>
                 </div>
 
@@ -82,7 +82,7 @@ export default function Introduction() {
                                                 <h3 className="text-2xl md:text-3xl font-bold text-white mb-4 tracking-wide">
                                                     {part.title.toUpperCase()}
                                                 </h3>
-                                                <p className="text-gray-300 text-lg leading-relaxed">{part.description}</p>
+                                                <p className="text-gray-400 text-2xl leading-relaxed">{part.description}</p>
                                             </div>
                                         </div>
                                     </div>

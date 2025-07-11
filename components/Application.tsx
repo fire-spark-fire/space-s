@@ -12,18 +12,67 @@ export default function Application() {
         contact: "",
         cv: null as File | null,
     })
+
+    const [error, setError] = useState<string | null>(null)
+    const [success, setSuccess] = useState<string | null>(null)
+    const maxSize = 10 * 1024 * 1024 // 10MB
     
 
     const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.files && e.target.files[0]) {
-            setFormData({ ...formData, cv: e.target.files[0] })
+            const file = e.target.files[0]
+            const allowedTypes = [
+                "application/pdf",
+                "application/msword",
+                "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+            ]
+
+            if (!allowedTypes.includes(file.type)) {
+                setError("仅支持 PDF 或 DOCX 文件")
+                setFormData({ ...formData, cv: null })
+                return
+            }
+
+            if (file.size > maxSize) {
+                setError("文件大小必须小于 10MB")
+                setFormData({ ...formData, cv: null })
+                return
+            }
+
+            setError(null)
+            setFormData({ ...formData, cv: file })
         }
     }
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
-        console.log("Form submitted:", formData)
-        // Handle form submission here
+
+        if (!formData.cv) {
+            setError("请上传符合要求的简历文件")
+            return
+        }
+
+        const data = new FormData()
+        data.append("name", formData.name)
+        data.append("contact", formData.contact)
+        data.append("cv", formData.cv)
+
+        try {
+            const res = await fetch("/api/apply", {
+                method: "POST",
+                body: data,
+            })
+            const json = await res.json()
+            if (!res.ok) {
+                throw new Error(json.error || "提交失败")
+            }
+            setSuccess("提交成功！请检查邮箱确认邮件。")
+            setError(null)
+            setFormData({ name: "", contact: "", cv: null })
+        } catch (err: any) {
+            setError(err.message || "提交失败")
+            setSuccess(null)
+        }
     }
 
     return (
@@ -52,7 +101,7 @@ export default function Application() {
                                     htmlFor="name"
                                     className="block text-sm font-medium text-orange-400 mb-2 uppercase tracking-wider"
                                 >
-                                    姓名
+                                    姓名*
                                 </label>
                                 <Input
                                     id="name"
@@ -70,15 +119,15 @@ export default function Application() {
                                     htmlFor="contact"
                                     className="block text-sm font-medium text-orange-400 mb-2 uppercase tracking-wider"
                                 >
-                                    联系方式
+                                    email*
                                 </label>
                                 <Input
                                     id="contact"
-                                    type="text"
+                                    type="email"
                                     value={formData.contact}
                                     onChange={(e) => setFormData({ ...formData, contact: e.target.value })}
                                     className="bg-black/50 border-red-600/30 focus:border-orange-500 text-white"
-                                    placeholder="联系方式"
+                                    placeholder="email"
                                     required
                                 />
                             </div>
@@ -88,7 +137,7 @@ export default function Application() {
                                     htmlFor="cv"
                                     className="block text-sm font-medium text-orange-400 mb-2 uppercase tracking-wider"
                                 >
-                                    上传简历
+                                    上传简历*
                                 </label>
                                 <div className="relative">
                                     <Input
@@ -103,6 +152,8 @@ export default function Application() {
                                 </div>
                                 {formData.cv && <p className="text-sm text-green-400 mt-2">文件已选择: {formData.cv.name}</p>}
                             </div>
+                            {error && <p className="text-sm text-red-500">{error}</p>}
+                            {success && <p className="text-sm text-green-500">{success}</p>}
 
                             <Button
                                 type="submit"
