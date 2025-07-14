@@ -69,8 +69,12 @@ export default function Application() {
             setSuccess("提交成功！请检查邮箱确认邮件。")
             setError(null)
             setFormData({ name: "", contactEmail: "", cv: null })
-        } catch (err: any) {
-            setError(err.message || "提交失败")
+        } catch (err: unknown) {
+            let errorMsg = "提交失败"
+            if (err instanceof Error) {
+                errorMsg = err.message
+            }
+            setError(errorMsg)
             setSuccess(null)
         }
     }

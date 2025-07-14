@@ -116,8 +116,9 @@ export async function POST(request: Request) {
         }
 
         return NextResponse.json({ message: "Application submitted successfully" }, { status: 200 })
-    } catch (err: any) {
-        console.error("Email sending error:", err.message || err)
+    } catch (err: unknown) {
+        const errorMessage = err instanceof Error ? err.message : 'An unknown error occurred'
+        console.error("Email sending error:", errorMessage)
         return NextResponse.json({ error: "邮件发送失败，请稍后再试" }, { status: 500 })
     }
 }
