@@ -28,9 +28,10 @@ export default function Members() {
                         >
                             <CardHeader className="text-center">
                                 <div className="mx-auto mb-4 w-20 h-20 bg-gradient-to-r from-red-600/20 to-orange-600/20 rounded-full flex items-center justify-center shadow-lg shadow-red-500/25">
-                                <Image src={`https://robohash.org/${member.nickname}`} width={100} height={100} alt={member.nickname} />
+                                {/* <Image src={`https://robohash.org/${member.memberName}`} width={100} height={100} alt={member.memberName} /> */}
+                                <Image src={member.image} width={100} height={100} alt={member.memberName} />
                                 </div>
-                                <CardTitle className="text-xl text-orange-400 tracking-wide">{member.nickname}</CardTitle>
+                                <CardTitle className="text-xl text-orange-400 tracking-wide">{member.memberName}</CardTitle>
                             </CardHeader>
                             <CardContent className="hidden sm:block text-center">
                                 <CardDescription className="hidden md:block text-gray-300 mb-4 leading-relaxed">

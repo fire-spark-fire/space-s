@@ -9,7 +9,7 @@ import { useState } from "react"
 export default function Application() {
     const [formData, setFormData] = useState({
         name: "",
-        contact: "",
+        contactEmail: "",
         cv: null as File | null,
     })
 
@@ -54,7 +54,7 @@ export default function Application() {
 
         const data = new FormData()
         data.append("name", formData.name)
-        data.append("contact", formData.contact)
+        data.append("contactEmail", formData.contactEmail)
         data.append("cv", formData.cv)
 
         try {
@@ -68,7 +68,7 @@ export default function Application() {
             }
             setSuccess("提交成功！请检查邮箱确认邮件。")
             setError(null)
-            setFormData({ name: "", contact: "", cv: null })
+            setFormData({ name: "", contactEmail: "", cv: null })
         } catch (err: any) {
             setError(err.message || "提交失败")
             setSuccess(null)
@@ -116,16 +116,16 @@ export default function Application() {
 
                             <div>
                                 <label
-                                    htmlFor="contact"
+                                    htmlFor="contactEmail"
                                     className="block text-sm font-medium text-orange-400 mb-2 uppercase tracking-wider"
                                 >
                                     email*
                                 </label>
                                 <Input
-                                    id="contact"
+                                    id="contactEmail"
                                     type="email"
-                                    value={formData.contact}
-                                    onChange={(e) => setFormData({ ...formData, contact: e.target.value })}
+                                    value={formData.contactEmail}
+                                    onChange={(e) => setFormData({ ...formData, contactEmail: e.target.value })}
                                     className="bg-black/50 border-red-600/30 focus:border-orange-500 text-white"
                                     placeholder="email"
                                     required
