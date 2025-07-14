@@ -3,7 +3,7 @@
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Upload } from "lucide-react"
+import { Upload, X } from "lucide-react"
 import { useState } from "react"
 
 export default function Application() {
@@ -15,8 +15,8 @@ export default function Application() {
 
     const [error, setError] = useState<string | null>(null)
     const [success, setSuccess] = useState<string | null>(null)
-    const maxSize = 10 * 1024 * 1024 // 10MB
-    
+    const maxSize = 3 * 1024 * 1024 // 3MB
+
 
     const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.files && e.target.files[0]) {
@@ -34,7 +34,7 @@ export default function Application() {
             }
 
             if (file.size > maxSize) {
-                setError("文件大小必须小于 10MB")
+                setError("文件必须小于 3MB")
                 setFormData({ ...formData, cv: null })
                 return
             }
@@ -42,6 +42,10 @@ export default function Application() {
             setError(null)
             setFormData({ ...formData, cv: file })
         }
+    }
+
+    const handleRemoveFile = () => {
+        setFormData({ ...formData, cv: null })
     }
 
     const handleSubmit = async (e: React.FormEvent) => {
@@ -141,7 +145,7 @@ export default function Application() {
                                     htmlFor="cv"
                                     className="block text-sm font-medium text-orange-400 mb-2 uppercase tracking-wider"
                                 >
-                                    上传简历*
+                                    上传简历* (文件必须小于 3MB)
                                 </label>
                                 <div className="relative">
                                     <Input
@@ -154,7 +158,22 @@ export default function Application() {
                                     />
                                     <Upload className="absolute right-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
                                 </div>
-                                {formData.cv && <p className="text-sm text-green-400 mt-2">文件已选择: {formData.cv.name}</p>}
+                                {formData.cv && (
+                                    <div className="flex items-center gap-2">
+                                        <p className="text-sm text-green-400">文件已选择: {formData.cv.name}</p>
+                                        {formData.cv && (
+                                            <button
+                                                type="button"
+                                                onClick={handleRemoveFile}
+                                                className="text-red-500 hover:text-red-400 transition-colors"
+                                                aria-label="Remove file"
+                                            >
+                                                <X className="w-4 h-4" />
+                                            </button>
+                                        )}
+
+                                    </div>
+                                )}
                             </div>
                             {error && <p className="text-sm text-red-500">{error}</p>}
                             {success && <p className="text-sm text-green-500">{success}</p>}

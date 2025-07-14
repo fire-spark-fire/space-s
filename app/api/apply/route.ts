@@ -17,7 +17,7 @@ export async function POST(request: Request) {
     // Validate file size (max 10MB)
     const MAX_SIZE = 3 * 1024 * 1024
     if (file.size > MAX_SIZE) {
-        return NextResponse.json({ error: "文件大小必须小于 3MB" }, { status: 400 })
+        return NextResponse.json({ error: "文件必须小于 3MB" }, { status: 400 })
     }
 
     // Validate file type (PDF or DOCX)
