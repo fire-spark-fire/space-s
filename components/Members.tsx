@@ -1,8 +1,6 @@
 import React from 'react'
-import Link from 'next/link'
 import Image from 'next/image'
 
-import { Mail } from "lucide-react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { MEMBERS } from "@/constants/default"
 
@@ -37,13 +35,16 @@ export default function Members() {
                                 <CardDescription className="hidden md:block text-gray-300 mb-4 leading-relaxed">
                                     {member.introduction}
                                 </CardDescription>
-                                <Link
-                                    href={member.contact}
-                                    className="inline-flex items-center space-x-2 text-red-500 hover:text-orange-500 transition-colors duration-300"
-                                >
-                                    <Mail className="w-4 h-4" />
-                                    <span>Contact</span>
-                                </Link>
+                                <div className="flex flex-wrap gap-2 justify-center mt-2">
+                                    {member.tags.map((tag) => (
+                                        <span
+                                            key={tag}
+                                            className="px-2 py-0.5 border border-red-500 text-red-500 text-xs rounded-md"
+                                        >
+                                            {tag}
+                                        </span>
+                                    ))}
+                                </div>
                             </CardContent>
                         </Card>
                     ))}
