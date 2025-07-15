@@ -18,7 +18,7 @@ export default function Members() {
                     </p>
                 </div>
 
-                <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-2 sm:gap-4 md:gap-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-2 gap-y-6 sm:gap-4 md:gap-6">
                     {MEMBERS.map((member, index) => (
                         <Card
                             key={index}
@@ -31,8 +31,8 @@ export default function Members() {
                                 </div>
                                 <CardTitle className="text-xl text-orange-400 tracking-wide">{member.memberName}</CardTitle>
                             </CardHeader>
-                            <CardContent className="hidden sm:block text-center">
-                                <CardDescription className="hidden md:block text-gray-300 mb-4 leading-relaxed">
+                            <CardContent className="text-center">
+                                <CardDescription className="text-gray-300 mb-4 leading-relaxed">
                                     {member.introduction}
                                 </CardDescription>
                                 <div className="flex flex-wrap gap-2 justify-center mt-2">
