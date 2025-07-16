@@ -25,9 +25,8 @@ export default function Members() {
                             className="bg-gray-900/50 border-red-600/20 hover:border-orange-500/50 transition-all duration-300 transform hover:scale-105 backdrop-blur-sm"
                         >
                             <CardHeader className="text-center">
-                                <div className="mx-auto mb-4 w-20 h-20 bg-gradient-to-r from-red-600/20 to-orange-600/20 rounded-full flex items-center justify-center shadow-lg shadow-red-500/25">
-                                {/* <Image src={`https://robohash.org/${member.memberName}`} width={100} height={100} alt={member.memberName} /> */}
-                                <Image src={member.image} width={100} height={100} alt={member.memberName} />
+                                <div className="mx-auto mb-4 w-42 h-42 bg-gradient-to-r from-red-600/20 to-orange-600/20 rounded-full flex items-center justify-center shadow-lg shadow-red-500/25">
+                                <Image src={member.image} width={200} height={200} alt={member.memberName} />
                                 </div>
                                 <CardTitle className="text-xl text-orange-400 tracking-wide">{member.memberName}</CardTitle>
                             </CardHeader>
