@@ -24,7 +24,7 @@ const Hero = ({ scrollToSection }: HeroProps) => {
         <span className="bg-gradient-to-r from-red-400 via-orange-400 to-red-500 bg-clip-text text-transparent tracking-tight">
          SPARK
         </span>
-        <span className="text-white text-3xl ml-6">认识更多<span className="text-orange-400 italic mr-2">不平凡</span>的灵魂</span>
+        <span className="text-white text-3xl ml-6">认识更多<span className="text-orange-400 italic mr-2">不平凡</span>的个体</span>
       </h1>
       {/* <p className="text-2xl md:text-4xl font-light mb-8 text-orange-300 tracking-wide">is the power</p> */}
       <Button
