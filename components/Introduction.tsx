@@ -1,4 +1,4 @@
-import { Star, Heart, Milestone, CheckCheck, Goal, SlidersVertical, Lightbulb } from "lucide-react"
+import { Star, Heart, Milestone, CheckCheck, Goal, Lightbulb } from "lucide-react"
 
 export default function Introduction() {
 
