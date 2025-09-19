@@ -1,7 +1,8 @@
 "use client"
 
 import React from "react"
-import { Flame, Menu, X } from "lucide-react"
+import Link from "next/link"
+import { Flame, Menu, X, UserPlus } from "lucide-react"
 
 interface NavigationProps {
   mobileMenuOpen: boolean
@@ -38,6 +39,13 @@ export default function Navigation({ mobileMenuOpen, setMobileMenuOpen, scrollTo
                 <div className="absolute inset-0 bg-red-500/10 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10"></div>
               </button>
             ))}
+            <Link
+              href="/signup"
+              className="relative group bg-gradient-to-r from-red-600 to-orange-600 hover:from-red-700 hover:to-orange-700 text-white px-4 py-2 rounded-lg transition-all duration-300 uppercase tracking-wider text-sm font-medium flex items-center gap-2"
+            >
+              <UserPlus size={16} />
+              Join Us
+            </Link>
           </div>
 
           {/* Mobile Menu Button */}
@@ -59,6 +67,13 @@ export default function Navigation({ mobileMenuOpen, setMobileMenuOpen, scrollTo
                   {item}
                 </button>
               ))}
+              <Link
+                href="/signup"
+                className="block w-full bg-gradient-to-r from-red-600 to-orange-600 hover:from-red-700 hover:to-orange-700 text-white px-4 py-2 rounded-lg transition-all duration-300 uppercase tracking-wider text-sm font-medium text-center"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                Join Us
+              </Link>
             </div>
           </div>
         )}
