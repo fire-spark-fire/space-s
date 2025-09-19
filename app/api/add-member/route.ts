@@ -68,7 +68,7 @@ export async function POST(request: NextRequest) {
     }
 
     const requestBody: RequestBody = await request.json()
-    const { timestamp, userAgent, ...newMember } = requestBody
+    const { timestamp, ...newMember } = requestBody
     
     // Basic timestamp validation (request shouldn't be too old)
     if (timestamp && Date.now() - timestamp > 300000) { // 5 minutes
@@ -108,7 +108,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Convert the matched string to JSON by replacing single quotes and handling the structure
-    let membersArrayStr = membersMatch[1]
+    const membersArrayStr = membersMatch[1]
     
     // Add the new member to the array string
     const newMemberStr = `  {

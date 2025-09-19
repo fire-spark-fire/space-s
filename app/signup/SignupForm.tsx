@@ -283,7 +283,7 @@ export default function SignupForm() {
           if (response.status === 429) {
             errorMessage = errorData.message || '请求过于频繁，请稍后重试'
           }
-        } catch (jsonError) {
+        } catch {
           // If response is not JSON, show status-based message
           errorMessage = `提交失败 (HTTP ${response.status})`
         }
